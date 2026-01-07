@@ -4,16 +4,12 @@ import { Footer } from "./Footer";
 
 export const Layout = () => {
   return (
-    <div className="app-layout">
-      <header>
-        <Header/>
-      </header>
-      <main>
+    <div className="h-screen flex flex-col">
+      <Header />
+      <main className="flex-1 overflow-y-auto">
         <Outlet />
       </main>
-      <footer>
-        <Footer/>
-      </footer>
+      <Footer />
     </div>
   );
 }
