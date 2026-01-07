@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useRef } from "react";
 import { useNavigate } from "react-router";
 import { SwipeButtons } from "./SwipeButtons";
 import { DietTags } from "./DietTags";
@@ -14,20 +14,15 @@ type Props = {
   recipe: Recipe;
   onLike: (r: Recipe) => void;
   onDislike: (r: Recipe) => void;
-  partnerLiked?: boolean;
-  isMatched?: boolean;
 };
 
 export const MealCard = ({
   recipe,
   onLike,
   onDislike,
-  partnerLiked = false,
-  isMatched = false,
 }: Props) => {
   const cardRef = useRef<HTMLDivElement | null>(null);
   const navigate = useNavigate();
-  const [keyAction, setKeyAction] = useState<"like" | "dislike" | null>(null);
 
   const handleCardClick = (e: React.MouseEvent) => {
     if ((e.target as HTMLElement).closest('button')) {
@@ -38,23 +33,11 @@ export const MealCard = ({
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === "ArrowRight") {
-      setKeyAction("like");
-      setTimeout(() => {
-        onLike(recipe);
-        setKeyAction(null);
-      }, 150);
+      onLike(recipe);
     } else if (e.key === "ArrowLeft") {
-      setKeyAction("dislike");
-      setTimeout(() => {
-        onDislike(recipe);
-        setKeyAction(null);
-      }, 150);
+      onDislike(recipe);
     } else if (e.key === "Enter") {
-      setKeyAction("like");
-      setTimeout(() => {
-        onLike(recipe);
-        setKeyAction(null);
-      }, 150);
+      onLike(recipe);
     }
   };
 
@@ -90,29 +73,10 @@ export const MealCard = ({
         </div>
 
         <div className="mt-3">
-          <div className="flex items-center gap-2 mb-2">
-            {partnerLiked && !isMatched && (
-              <span
-                className="text-xs px-2 py-1 rounded-md bg-yellow-100 text-yellow-800 border border-yellow-200"
-              >
-                Partner liked
-              </span>
-            )}
-
-            {isMatched && (
-              <span
-                className="text-xs px-2 py-1 rounded-md bg-purple-100 text-purple-800 border border-purple-200"
-              >
-                Match!
-              </span>
-            )}
-          </div>
-
           <SwipeButtons 
             recipe={recipe} 
             onLike={onLike} 
             onDislike={onDislike}
-            keyAction={keyAction}
           />
         </div>
       </div>
