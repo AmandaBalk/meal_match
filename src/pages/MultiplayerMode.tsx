@@ -22,7 +22,13 @@ export const MultiplayerMode = () => {
   const [searchParams] = useSearchParams();
   const sessionId = searchParams.get("sessionId");
   
-  const [userId] = useState(() => `user_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`);
+  const [userId] = useState(() => {
+    const stored = sessionStorage.getItem("mm_user_id");
+    if (stored) return stored;
+    const newId = `user_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`;
+    sessionStorage.setItem("mm_user_id", newId);
+    return newId;
+  });
   const [session, setSession] = useState<Session | null>(null);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [shareLink, setShareLink] = useState("");
