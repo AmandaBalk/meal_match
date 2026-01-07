@@ -19,8 +19,17 @@ export const SingleModeWrapper = () => {
         setLoading(true);
         
         const cacheKey = `mm_recipes_${diet}`;
+        const shuffledCacheKey = `mm_shuffled_${diet}`;
         const cachedData = localStorage.getItem(cacheKey);
+        const cachedShuffled = sessionStorage.getItem(shuffledCacheKey);
         const cacheTimestamp = localStorage.getItem(`${cacheKey}_timestamp`);
+        
+        if (cachedShuffled) {
+          console.log("Using shuffled session cache for", diet);
+          setRecipes(JSON.parse(cachedShuffled));
+          setLoading(false);
+          return;
+        }
         
         if (cachedData && cacheTimestamp) {
           const age = Date.now() - parseInt(cacheTimestamp);
@@ -28,8 +37,10 @@ export const SingleModeWrapper = () => {
           
           if (age < maxAge) {
             console.log("Using cached recipes for", diet);
-            const cachedRecipes = JSON.parse(cachedData);
-            setRecipes(shuffleArray(cachedRecipes));
+            const cachedRecipes: Recipe[] = JSON.parse(cachedData);
+            const shuffled = shuffleArray(cachedRecipes);
+            setRecipes(shuffled);
+            sessionStorage.setItem(shuffledCacheKey, JSON.stringify(shuffled));
             setLoading(false);
             return;
           }
@@ -65,6 +76,7 @@ export const SingleModeWrapper = () => {
         
         localStorage.setItem(cacheKey, JSON.stringify(transformedRecipes));
         localStorage.setItem(`${cacheKey}_timestamp`, Date.now().toString());
+        sessionStorage.setItem(shuffledCacheKey, JSON.stringify(shuffledRecipes));
         console.log("Cached recipes for", diet);
       } catch (err) {
         setError(err instanceof Error ? err.message : "Unknown error");

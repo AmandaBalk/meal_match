@@ -2,7 +2,10 @@ import { useState } from "react";
 import { MealCard, Recipe } from "../components/MealCard";
 
 export const SingleMode = ({ recipes }: { recipes: Recipe[] }) => {
-  const [index, setIndex] = useState(0);
+  const [index, setIndex] = useState(() => {
+    const saved = sessionStorage.getItem("mm_solo_index");
+    return saved ? parseInt(saved) : 0;
+  });
   const [favorites, setFavorites] = useState<Recipe[]>(
     () => JSON.parse(localStorage.getItem("mm_favorites") || "[]")
   );
@@ -11,11 +14,15 @@ export const SingleMode = ({ recipes }: { recipes: Recipe[] }) => {
     const newFavs = [...favorites, r];
     setFavorites(newFavs);
     localStorage.setItem("mm_favorites", JSON.stringify(newFavs));
-    setIndex((prev) => prev + 1);
+    const newIndex = index + 1;
+    setIndex(newIndex);
+    sessionStorage.setItem("mm_solo_index", newIndex.toString());
   };
 
   const handleDislike = () => {
-    setIndex((prev) => prev + 1);
+    const newIndex = index + 1;
+    setIndex(newIndex);
+    sessionStorage.setItem("mm_solo_index", newIndex.toString());
   };
 
   if (index >= recipes.length) {
