@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { useNavigate } from "react-router";
 import { SwipeButtons } from "./SwipeButtons";
 import { DietTags } from "./DietTags";
@@ -27,6 +27,7 @@ export const MealCard = ({
 }: Props) => {
   const cardRef = useRef<HTMLDivElement | null>(null);
   const navigate = useNavigate();
+  const [keyAction, setKeyAction] = useState<"like" | "dislike" | null>(null);
 
   const handleCardClick = (e: React.MouseEvent) => {
     if ((e.target as HTMLElement).closest('button')) {
@@ -37,11 +38,23 @@ export const MealCard = ({
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === "ArrowRight") {
-      onLike(recipe);
+      setKeyAction("like");
+      setTimeout(() => {
+        onLike(recipe);
+        setKeyAction(null);
+      }, 150);
     } else if (e.key === "ArrowLeft") {
-      onDislike(recipe);
+      setKeyAction("dislike");
+      setTimeout(() => {
+        onDislike(recipe);
+        setKeyAction(null);
+      }, 150);
     } else if (e.key === "Enter") {
-      onLike(recipe);
+      setKeyAction("like");
+      setTimeout(() => {
+        onLike(recipe);
+        setKeyAction(null);
+      }, 150);
     }
   };
 
@@ -95,7 +108,12 @@ export const MealCard = ({
             )}
           </div>
 
-          <SwipeButtons recipe={recipe} onLike={onLike} onDislike={onDislike} />
+          <SwipeButtons 
+            recipe={recipe} 
+            onLike={onLike} 
+            onDislike={onDislike}
+            keyAction={keyAction}
+          />
         </div>
       </div>
     </div>
