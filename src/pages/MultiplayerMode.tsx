@@ -285,8 +285,6 @@ export const MultiplayerMode = () => {
     );
   }
 
-  const userCount = Object.keys(session.users || {}).length;
-
   return (
     <div className="h-full flex flex-col bg-gradient-to-br from-orange-50 via-yellow-50 to-red-50 p-4">
       <div className="flex-shrink-0 mb-2 text-center">
@@ -294,7 +292,7 @@ export const MultiplayerMode = () => {
           Swipe Together
         </h1>
         <p className="text-xs text-gray-600">
-          {currentIndex + 1} / {session.recipes.length} recipes • 👥 {userCount} {userCount === 1 ? "person" : "people"}
+          {currentIndex + 1} / {session.recipes.length} recipes
           {session.matches && session.matches.length > 0 && ` • ❤️ ${session.matches.length} ${session.matches.length === 1 ? "match" : "matches"}`}
         </p>
       </div>

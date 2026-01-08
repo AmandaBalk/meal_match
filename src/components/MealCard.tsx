@@ -37,7 +37,8 @@ export const MealCard = ({
     } else if (e.key === "ArrowLeft") {
       onDislike(recipe);
     } else if (e.key === "Enter") {
-      onLike(recipe);
+      e.preventDefault();
+      navigate(`/recipe/${recipe.id}`);
     }
   };
 
